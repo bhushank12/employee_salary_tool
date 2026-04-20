@@ -31,6 +31,14 @@ class EmployeesController < ApplicationController
     render json: { error: 'Employee not found' }, status: :not_found
   end
 
+  def destroy
+    @employee = Employee.find(params[:id])
+    @employee.destroy
+    head :no_content
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Employee not found' }, status: :not_found
+  end
+
   private
   def employee_params
     params.require(:employee).permit(:first_name, :last_name, :job_title, :country, :salary, :email, :phone_number)
