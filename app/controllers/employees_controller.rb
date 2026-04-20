@@ -8,6 +8,11 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def index
+    @employees = Employee.all
+    render json: @employees
+  end
+
   private
   def employee_params
     params.require(:employee).permit(:first_name, :last_name, :job_title, :country, :salary, :email, :phone_number)
