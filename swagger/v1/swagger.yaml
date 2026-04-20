@@ -74,6 +74,51 @@ paths:
           description: Employee found
         '404':
           description: Employee not found
+    patch:
+      summary: Update an employee
+      tags:
+      - Employees
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Employee updated
+        '404':
+          description: Employee not found
+        '422':
+          description: Invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+                job_title:
+                  type: string
+                  example: Software Engineer
+                country:
+                  type: string
+                  example: USA
+                salary:
+                  type: number
+                  format: float
+                  example: 75000.0
+                email:
+                  type: string
+                  example: john@example.com
+                phone_number:
+                  type: string
+                  example: '1234567890'
 servers:
 - url: https://{defaultHost}
   variables:

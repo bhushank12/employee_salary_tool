@@ -76,5 +76,59 @@ RSpec.describe 'Employees API', type: :request do
         end
       end
     end
+
+    patch 'Update an employee' do
+      tags 'Employees'
+      consumes 'application/json'
+      produces 'application/json'
+
+      parameter name: :id, in: :path, type: :integer
+      parameter name: :employee, in: :body, schema: {
+        type: :object,
+        properties: {
+          first_name: { type: :string, example: 'John' },
+          last_name: { type: :string, example: 'Doe' },
+          job_title: { type: :string, example: 'Software Engineer' },
+          country: { type: :string, example: 'USA' },
+          salary: { type: :number, format: :float, example: 75000.00 },
+          email: { type: :string, example: 'john@example.com' },
+          phone_number: { type: :string, example: '1234567890' }
+        }
+      }
+
+      response '200', 'Employee updated' do
+        let(:employee_record) { create(:employee) }
+        let(:id) { employee_record.id }
+        let(:employee) { { first_name: 'Jane' } }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          expect(response).to have_http_status(:ok)
+          expect(data['first_name']).to eq('Jane')
+        end
+      end
+
+      response '404', 'Employee not found' do
+        let(:id) { 999 }
+        let(:employee) { { first_name: 'Jane' } }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:not_found)
+          expect(JSON.parse(response.body)['error']).to eq('Employee not found')
+        end
+      end
+
+      response '422', 'Invalid request' do
+        let(:employee_record) { create(:employee) }
+        let(:id) { employee_record.id }
+        let(:employee) { { salary: -1000 } }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)['errors']).to include("Salary must be greater than 0")
+        end
+      end
+    end
   end
 end
