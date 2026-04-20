@@ -51,4 +51,8 @@ RSpec.describe Employee, type: :model do
     employee.salary = 'not_a_number'
     expect(employee).not_to be_valid
   end
+
+  it 'return full name correctly' do
+    expect(employee.full_name).to eq("#{employee.first_name} #{employee.last_name}")
+  end
 end
