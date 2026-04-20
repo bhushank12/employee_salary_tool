@@ -31,5 +31,21 @@ RSpec.describe 'Employees API', type: :request do
         run_test!
       end
     end
+
+    get 'List employees' do
+      tags 'Employees'
+      produces 'application/json'
+
+      response '200', 'List employees' do
+        before { create_list(:employee, 3) }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          expect(response).to have_http_status(:ok)
+          expect(data.size).to eq(3)
+        end
+      end
+    end
   end
 end

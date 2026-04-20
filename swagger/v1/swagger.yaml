@@ -51,6 +51,13 @@ paths:
               - salary
               - email
               - phone_number
+    get:
+      summary: List employees
+      tags:
+      - Employees
+      responses:
+        '200':
+          description: List employees
 servers:
 - url: https://{defaultHost}
   variables:
