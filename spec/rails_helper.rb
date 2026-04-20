@@ -69,4 +69,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Add FactoryBot methods to rspec so that we should use `build(:employee)` instead of `FactoryBot.build(:employee)`
+  config.include FactoryBot::Syntax::Methods
 end
