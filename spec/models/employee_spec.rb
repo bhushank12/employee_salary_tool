@@ -41,4 +41,14 @@ RSpec.describe Employee, type: :model do
     employee.phone_number = nil
     expect(employee).not_to be_valid
   end
+
+  it 'is invalid if salary is less than or equal to 0' do
+    employee.salary = 0
+    expect(employee).not_to be_valid
+  end
+
+  it 'is invalid if salary is not a number' do
+    employee.salary = 'not_a_number'
+    expect(employee).not_to be_valid
+  end
 end
