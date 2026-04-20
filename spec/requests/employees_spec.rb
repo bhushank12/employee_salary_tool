@@ -130,5 +130,29 @@ RSpec.describe 'Employees API', type: :request do
         end
       end
     end
+
+    delete 'Delete an employee' do
+      tags 'Employees'
+      parameter name: :id, in: :path, type: :integer
+
+      response '204', 'Employee deleted' do
+        let(:employee) { create(:employee) }
+        let(:id) { employee.id }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:no_content)
+          expect(Employee.find_by(id: id)).to be_nil
+        end
+      end
+
+      response '404', 'Employee not found' do
+        let(:id) { 999 }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:not_found)
+          expect(JSON.parse(response.body)['error']).to eq('Employee not found')
+        end
+      end
+    end
   end
 end

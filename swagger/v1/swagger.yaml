@@ -119,6 +119,21 @@ paths:
                 phone_number:
                   type: string
                   example: '1234567890'
+    delete:
+      summary: Delete an employee
+      tags:
+      - Employees
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Employee deleted
+        '404':
+          description: Employee not found
 servers:
 - url: https://{defaultHost}
   variables:
