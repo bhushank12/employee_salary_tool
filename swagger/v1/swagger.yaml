@@ -134,6 +134,47 @@ paths:
           description: Employee deleted
         '404':
           description: Employee not found
+  "/insights":
+    get:
+      summary: Get insights for country
+      tags:
+      - Insights
+      parameters:
+      - name: country
+        in: query
+        required: true
+        description: Country to filter insights by
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Insights retrieved
+          content:
+            application/json:
+              examples:
+                example:
+                  value:
+                    overall:
+                      min_salary: 30000.0
+                      max_salary: 250000.0
+                      average_salary: 135000.0
+              schema:
+                type: object
+                properties:
+                  overall:
+                    type: object
+                    properties:
+                      min_salary:
+                        type: number
+                        format: float
+                      max_salary:
+                        type: number
+                        format: float
+                      average_salary:
+                        type: number
+                        format: float
+        '400':
+          description: Invalid request
 servers:
 - url: https://{defaultHost}
   variables:

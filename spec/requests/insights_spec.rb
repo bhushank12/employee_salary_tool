@@ -1,0 +1,63 @@
+require 'swagger_helper'
+
+RSpec.describe 'Insights API', type: :request do
+  path '/insights' do
+    get 'Get insights for country' do
+      tags 'Insights'
+      produces 'application/json'
+      parameter name: :country, in: :query, type: :string, required: true, description: 'Country to filter insights by'
+
+      response '200', 'Insights retrieved' do
+        schema type: :object,
+          properties: { 
+            overall: {
+              type: :object,
+              properties: {
+                min_salary: { type: :number, format: :float },
+                max_salary: { type: :number, format: :float },
+                average_salary: { type: :number, format: :float }
+              }
+            }
+          }
+
+        example 'application/json', :example, {
+          overall: {
+            min_salary: 30000.0,
+            max_salary: 250000.0,
+            average_salary: 135000.0
+          }
+        }
+
+        let(:country) { 'India' }
+
+        before do
+          create(:employee, salary: 50000, job_title: "Engineer", country: "India")
+          create(:employee, salary: 100000, job_title: "Engineer", country: "India")
+          create(:employee, salary: 150000, job_title: "Engineer", country: "India")
+          create(:employee, salary: 30000, job_title: "Engineer", country: "India")
+          create(:employee, salary: 200000, job_title: "Manager",  country: "India")
+          create(:employee, salary: 250000, job_title: "Manager",  country: "India")
+          create(:employee, salary: 230000, job_title: "Manager",  country: "India")
+        end
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          expect(response).to have_http_status(:ok)
+          expect(data["overall"]["min_salary"]).to eq(30000.0)
+          expect(data["overall"]["max_salary"]).to eq(250000.0)
+          expect(data["overall"]["average_salary"]).to eq(144285.71)
+        end
+      end
+
+      response '400', 'Invalid request' do
+        let(:country) { nil }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['error']).to eq('Country parameter is required')
+        end
+      end
+    end
+  end
+end
