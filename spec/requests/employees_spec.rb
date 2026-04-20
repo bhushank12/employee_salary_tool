@@ -48,4 +48,33 @@ RSpec.describe 'Employees API', type: :request do
       end
     end
   end
+
+  path '/employees/{id}' do
+    get 'Show an employee' do
+      tags 'Employees'
+      produces 'application/json'
+      parameter name: :id, in: :path, type: :integer
+
+      response '200', 'Employee found' do
+        let(:employee) { create(:employee) }
+        let(:id) { employee.id }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          expect(response).to have_http_status(:ok)
+          expect(data['id']).to eq(employee.id)
+        end
+      end
+
+      response '404', 'Employee not found' do
+        let(:id) { 999 }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:not_found)
+          expect(JSON.parse(response.body)['error']).to eq('Employee not found')
+        end
+      end
+    end
+  end
 end
