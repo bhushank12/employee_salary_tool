@@ -1,0 +1,58 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/employees":
+    post:
+      summary: Create an employee
+      tags:
+      - Employees
+      parameters: []
+      responses:
+        '201':
+          description: Employee created
+        '422':
+          description: Invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+                job_title:
+                  type: string
+                  example: Software Engineer
+                country:
+                  type: string
+                  example: USA
+                salary:
+                  type: number
+                  format: float
+                  example: 75000.0
+                email:
+                  type: string
+                  example: john@example.com
+                phone_number:
+                  type: string
+                  example: 123-456-7890
+              required:
+              - first_name
+              - last_name
+              - job_title
+              - country
+              - salary
+              - email
+              - phone_number
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
