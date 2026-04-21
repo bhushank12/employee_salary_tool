@@ -35,7 +35,7 @@ TOTAL_RECORDS.times.each_slice(BATCH_SIZE) do |batch|
       country: countries.sample,
       salary: rand(30000..150000),
       email: "#{first_name.downcase}.#{last_name.downcase}.#{i}@example.com",
-      phone_number: Faker::PhoneNumber.phone_number,
+      phone_number: "+91#{Faker::Number.number(digits: 10)}",
       created_at: Time.current,
       updated_at: Time.current
     }
