@@ -6,6 +6,7 @@ RSpec.describe 'Insights API', type: :request do
       tags 'Insights'
       produces 'application/json'
       parameter name: :country, in: :query, type: :string, required: true, description: 'Country to filter insights by'
+      parameter name: :job_title, in: :query, type: :string, required: false, description: 'Optional job title to filter average salary'
 
       response '200', 'Insights retrieved' do
         schema type: :object,
@@ -17,7 +18,16 @@ RSpec.describe 'Insights API', type: :request do
                 max_salary: { type: :number, format: :float },
                 average_salary: { type: :number, format: :float }
               }
-            }
+            },
+            job_title_average_salary: {
+              type: :object,
+              properties: {
+                job_title: { type: :string },
+                average_salary: { type: :number, format: :float }
+              },
+            },
+            total_employees: { type: :integer },
+            median_salary: { type: :number, format: :float }
           }
 
         example 'application/json', :example, {
@@ -29,6 +39,7 @@ RSpec.describe 'Insights API', type: :request do
         }
 
         let(:country) { 'India' }
+        let(:job_title) { 'Engineer' }
 
         before do
           create(:employee, salary: 50000, job_title: "Engineer", country: "India")
@@ -47,6 +58,10 @@ RSpec.describe 'Insights API', type: :request do
           expect(data["overall"]["min_salary"]).to eq(30000.0)
           expect(data["overall"]["max_salary"]).to eq(250000.0)
           expect(data["overall"]["average_salary"]).to eq(144285.71)
+          expect(data["job_title_average_salary"]["job_title"]).to eq("Engineer")
+          expect(data["job_title_average_salary"]["average_salary"]).to eq(82500.0)
+          expect(data["total_employees"]).to eq(7)
+          expect(data["median_salary"]).to eq(150000.0)
         end
       end
 

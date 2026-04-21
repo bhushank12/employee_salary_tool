@@ -157,6 +157,12 @@ paths:
         description: Country to filter insights by
         schema:
           type: string
+      - name: job_title
+        in: query
+        required: false
+        description: Optional job title to filter average salary
+        schema:
+          type: string
       responses:
         '200':
           description: Insights retrieved
@@ -184,6 +190,19 @@ paths:
                       average_salary:
                         type: number
                         format: float
+                  job_title_average_salary:
+                    type: object
+                    properties:
+                      job_title:
+                        type: string
+                      average_salary:
+                        type: number
+                        format: float
+                  total_employees:
+                    type: integer
+                  median_salary:
+                    type: number
+                    format: float
         '400':
           description: Invalid request
 servers:
