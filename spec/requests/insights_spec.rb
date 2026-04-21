@@ -9,7 +9,7 @@ RSpec.describe 'Insights API', type: :request do
 
       response '200', 'Insights retrieved' do
         schema type: :object,
-          properties: { 
+          properties: {
             overall: {
               type: :object,
               properties: {

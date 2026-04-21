@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :employees
+  get '/insights', to: 'insights#index'
 end
