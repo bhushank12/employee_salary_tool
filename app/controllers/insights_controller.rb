@@ -9,7 +9,7 @@ class InsightsController < ApplicationController
     render json: {
       overall: overall_stats(employees),
       job_title_average_salary: job_title_average_salary(employees, job_title),
-      total_employees: employees.count,
+      total_employees: employees.size,
       median_salary: median_salary(employees),
     }
   end
@@ -25,7 +25,7 @@ class InsightsController < ApplicationController
   end
 
   def job_title_average_salary(employees, job_title)
-    return unless job_title.present?
+    return {} unless job_title.present?
 
     {
       job_title: job_title,
@@ -34,17 +34,7 @@ class InsightsController < ApplicationController
   end
 
   def median_salary(employees)
-    salaries = employees.order(:salary).pluck(:salary)
-    return if salaries.empty?
-
-    mid = salaries.size / 2
-    result =
-      if salaries.size.odd?
-        salaries[mid]
-      else
-        (salaries[mid - 1] + salaries[mid]) / 2.0
-      end
-    result.to_f
+    employees.pick(Arel.sql('PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY salary)'))
   end
 
 
