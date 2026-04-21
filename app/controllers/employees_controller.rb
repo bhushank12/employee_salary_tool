@@ -15,6 +15,7 @@ class EmployeesController < ApplicationController
   def index
     employees = Employee
                   .select(:id, :first_name, :last_name, :email, :job_title, :country, :salary, :phone_number)
+                  .order(updated_at: :desc)
                   .page(params[:page] || 1)
                   .per(params[:per_page] || 10)
 
