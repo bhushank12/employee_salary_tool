@@ -50,4 +50,5 @@ group :development, :test do
   gem "faker"
   gem "rswag"
   gem "kaminari"
+  gem "rack-cors"
 end
