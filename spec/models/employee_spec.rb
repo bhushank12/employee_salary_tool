@@ -55,4 +55,19 @@ RSpec.describe Employee, type: :model do
   it 'return full name correctly' do
     expect(employee.full_name).to eq("#{employee.first_name} #{employee.last_name}")
   end
+
+  it 'is invalid with wrong email format' do
+    employee.email = 'invalid_email'
+
+    expect(employee).not_to be_valid
+    expect(employee.errors.full_messages).to include('Email is invalid')
+  end
+  
+  it 'is invalid with duplicate email' do
+    create(:employee, email: 'test@example.com')
+    employee.email = 'test@example.com'
+  
+    expect(employee).not_to be_valid
+    expect(employee.errors.full_messages).to include('Email has already been taken')
+  end
 end
