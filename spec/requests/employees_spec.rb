@@ -107,13 +107,13 @@ RSpec.describe 'Employees API', type: :request do
       response '200', 'Employee updated' do
         let(:employee_record) { create(:employee) }
         let(:id) { employee_record.id }
-        let(:employee) { { first_name: 'Jane' } }
+        let(:employee) { { first_name: 'Jane', last_name: 'Dod' } }
 
         run_test! do |response|
           data = JSON.parse(response.body)
 
           expect(response).to have_http_status(:ok)
-          expect(data['first_name']).to eq('Jane')
+          expect(data['full_name']).to eq('Jane Dod')
         end
       end
 

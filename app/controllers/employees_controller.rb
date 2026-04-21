@@ -6,17 +6,20 @@ class EmployeesController < ApplicationController
     employee = Employee.new(employee_params)
 
     if employee.save
-      render json: employee, status: :created
+      render json: EmployeeSerializer.call(employee), status: :created
     else
       render json: { errors: employee.errors.full_messages }, status: :unprocessable_content
     end
   end
 
   def index
-    employees = Employee.page(params[:page]).per(params[:per_page] || 10)
+    employees = Employee
+                  .select(:id, :first_name, :last_name, :email, :job_title, :country, :salary, :phone_number)
+                  .page(params[:page])
+                  .per(params[:per_page] || 10)
 
     render json: {
-      data: employees,
+      data: employees.map { |e| EmployeeSerializer.call(e) },
       meta: {
         current_page: employees.current_page,
         total_pages: employees.total_pages,
@@ -26,12 +29,12 @@ class EmployeesController < ApplicationController
   end
 
   def show
-    render json: @employee, status: :ok
+    render json: EmployeeSerializer.call(@employee), status: :ok
   end
 
   def update
     if @employee.update(employee_params)
-      render json: @employee, status: :ok
+      render json: EmployeeSerializer.call(@employee), status: :ok
     else
       render json: { errors: @employee.errors.full_messages }, status: :unprocessable_content
     end
