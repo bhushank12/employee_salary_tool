@@ -2,11 +2,11 @@ require 'swagger_helper'
 
 RSpec.describe 'Insights API', type: :request do
   path '/insights' do
-    get 'Get insights for country' do
+    get 'Get insights for country and job title' do
       tags 'Insights'
       produces 'application/json'
-      parameter name: :country, in: :query, type: :string, required: true, description: 'Country to filter insights by'
-      parameter name: :job_title, in: :query, type: :string, required: false, description: 'Optional job title to filter average salary'
+      parameter name: :country, in: :query, type: :string, required: true, description: 'Required filter to get min, max, average, median salary and employee count for a specific country'
+      parameter name: :job_title, in: :query, type: :string, required: false, description: 'Optional filter to get average salary for a specific job title'
 
       response '200', 'Insights retrieved' do
         schema type: :object,
@@ -35,7 +35,13 @@ RSpec.describe 'Insights API', type: :request do
             min_salary: 30000.0,
             max_salary: 250000.0,
             average_salary: 135000.0
-          }
+          },
+          job_title_average_salary: {
+            job_title: "Engineer",
+            average_salary: 82500.0
+          },
+          total_employees: 7,
+          median_salary: 150000.0
         }
 
         let(:country) { 'India' }
