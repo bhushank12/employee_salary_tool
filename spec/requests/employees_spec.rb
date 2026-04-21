@@ -125,7 +125,7 @@ RSpec.describe 'Employees API', type: :request do
         let(:employee) { { salary: -1000 } }
 
         run_test! do |response|
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(JSON.parse(response.body)['errors']).to include("Salary must be greater than 0")
         end
       end

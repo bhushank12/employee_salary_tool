@@ -6,7 +6,7 @@ class EmployeesController < ApplicationController
     if @employee.save
       render json: @employee, status: :created
     else
-      render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @employee.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -23,9 +23,9 @@ class EmployeesController < ApplicationController
 
   def update
     if @employee.update(employee_params)
-      render json: @employee
+      render json: @employee, status: :ok
     else
-      render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @employee.errors.full_messages }, status: :unprocessable_content
     end
   rescue ActiveRecord::RecordNotFound
     render json: { error: 'Employee not found' }, status: :not_found
