@@ -1,12 +1,14 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: %i[show update destroy]
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def create
-    @employee = Employee.new(employee_params)
-    if @employee.save
-      render json: @employee, status: :created
+    employee = Employee.new(employee_params)
+
+    if employee.save
+      render json: employee, status: :created
     else
-      render json: { errors: @employee.errors.full_messages }, status: :unprocessable_content
+      render json: { errors: employee.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -16,9 +18,7 @@ class EmployeesController < ApplicationController
   end
 
   def show
-    render json: @employee
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Employee not found' }, status: :not_found
+    render json: @employee, status: :ok
   end
 
   def update
@@ -27,26 +27,24 @@ class EmployeesController < ApplicationController
     else
       render json: { errors: @employee.errors.full_messages }, status: :unprocessable_content
     end
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Employee not found' }, status: :not_found
   end
 
   def destroy
     @employee.destroy
     head :no_content
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Employee not found' }, status: :not_found
   end
 
   private
 
   def set_employee
     @employee = Employee.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Employee not found' }, status: :not_found
   end
 
   def employee_params
     params.require(:employee).permit(:first_name, :last_name, :job_title, :country, :salary, :email, :phone_number)
+  end
+
+  def record_not_found
+    render json: { error: 'Employee not found' }, status: :not_found
   end
 end
