@@ -70,4 +70,46 @@ RSpec.describe Employee, type: :model do
     expect(employee).not_to be_valid
     expect(employee.errors.full_messages).to include('Email has already been taken')
   end
+
+  it 'is valid with correct phone number' do
+    employee.phone_number = '9876543210'
+
+    expect(employee).to be_valid
+    expect(employee.errors.full_messages).not_to include('Phone number must be a valid phone number')
+  end
+  
+  it 'is valid with country code' do
+    employee.phone_number = '+919876543210'
+
+    expect(employee).to be_valid
+    expect(employee.errors.full_messages).not_to include('Phone number must be a valid phone number')
+  end
+  
+  it 'is invalid with alphabets in phone number' do
+    employee.phone_number = '98abc54321'
+
+    expect(employee).not_to be_valid
+    expect(employee.errors.full_messages).to include('Phone number must be a valid phone number')
+  end
+  
+  it 'is invalid with special characters' do
+    employee.phone_number = '987-654-3210'
+
+    expect(employee).not_to be_valid
+    expect(employee.errors.full_messages).to include('Phone number must be a valid phone number')
+  end
+  
+  it 'is invalid if too short' do
+    employee.phone_number = '12345'
+
+    expect(employee).not_to be_valid
+    expect(employee.errors.full_messages).to include('Phone number must be a valid phone number')
+  end
+  
+  it 'is invalid if too long' do
+    employee.phone_number = '1234567890123456'
+
+    expect(employee).not_to be_valid
+    expect(employee.errors.full_messages).to include('Phone number must be a valid phone number')
+  end
 end
