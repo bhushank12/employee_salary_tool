@@ -6,6 +6,6 @@ FactoryBot.define do
     country { Faker::Address.country }
     salary { Faker::Number.decimal(l_digits: 5, r_digits: 2) }
     email { Faker::Internet.email }
-    phone_number { Faker::PhoneNumber.phone_number }
+    phone_number { "+91#{Faker::Number.number(digits: 10)}" }
   end
 end
