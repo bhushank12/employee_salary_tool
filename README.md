@@ -80,6 +80,10 @@ bundle install
 
 rails db:create db:migrate
 
+### 4\. Start rails server
+
+rails s
+
 * * * * *
 
 🌱 Seeding Data (10,000 Employees)
