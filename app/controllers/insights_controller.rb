@@ -13,7 +13,7 @@ class InsightsController < ApplicationController
     {
       min_salary: employees.minimum(:salary)&.to_f,
       max_salary: employees.maximum(:salary)&.to_f,
-      average_salary: employees.average(:salary)&.to_f.round(2)
+      average_salary: employees.average(:salary)&.to_f&.round(2)
     }
   end
 
