@@ -55,9 +55,20 @@ paths:
       summary: List employees
       tags:
       - Employees
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: Number of employees per page
+        schema:
+          type: integer
       responses:
         '200':
-          description: List employees
+          description: List employees with pagination
   "/employees/{id}":
     get:
       summary: Show an employee

@@ -36,14 +36,22 @@ RSpec.describe 'Employees API', type: :request do
       tags 'Employees'
       produces 'application/json'
 
-      response '200', 'List employees' do
-        before { create_list(:employee, 3) }
+      parameter name: :page, in: :query, type: :integer, description: 'Page number for pagination'
+      parameter name: :per_page, in: :query, type: :integer, description: 'Number of employees per page'
+
+      response '200', 'List employees with pagination' do
+        before { create_list(:employee, 15) }
+        let(:page) { 1 }
+        let(:per_page) { 10 }
 
         run_test! do |response|
           data = JSON.parse(response.body)
 
           expect(response).to have_http_status(:ok)
-          expect(data.size).to eq(3)
+          expect(data['data'].length).to eq(10)
+          expect(data['meta']['current_page']).to eq(1)
+          expect(data['meta']['total_pages']).to eq(2)
+          expect(data['meta']['total_count']).to eq(15)
         end
       end
     end
