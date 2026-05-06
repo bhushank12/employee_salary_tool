@@ -10,7 +10,7 @@ A Ruby on Rails API to manage employees and provide salary insights with optimiz
 -------------
 
 -   Ruby 3.x
--   Rails 7.x
+-   Rails 8.x
 -   PostgreSQL
 
 * * * * *
